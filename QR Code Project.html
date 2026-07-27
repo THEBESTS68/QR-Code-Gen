@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Modern Tech QR Code Studio</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+
+<script src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Kanit', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    /* พื้นหลังแนว Modern Tech */
+    background:
+        radial-gradient(circle at top left, #29323c 0%, #485563 100%),
+        linear-gradient(135deg, #0f2027, #203a43, #411818);
+    background-blend-mode: overlay;
+    color: #333;
+}
+
+/* เลย์เอาต์หลัก 2 คอลัมน์ */
+.container {
+    width: 100%;
+    max-width: 1000px; /* ขยายความกว้างเพื่อรองรับ 2 คอลัมน์ */
+    display: flex;
+    gap: 30px;
+    background: rgba(255, 255, 255, 0.7);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 35px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+    animation: show .6s ease;
+}
+@keyframes show {
+    from { opacity: 0; transform: translateY(25px); }
+    to { opacity: 1; transform: none; }
+}
+
+/* ฝั่งซ้าย: แผงควบคุม */
+.left-panel {
+    flex: 1;
+}
+
+/* ฝั่งขวา: พรีวิว QR Code */
+.right-panel {
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* ทำให้ QR Code ล็อกติดจอเวลาเลื่อนตั้งค่า */
+    position: sticky;
+    top: 30px;
+    height: fit-content;
+    background: rgba(240, 244, 248, 0.7);
+    border: 1px solid #e2e8f0;
+    border-radius: 24px;
+    padding: 25px;
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.8);
+}
+
+h2 { text-align: left; margin-bottom: 25px; font-size: 28px; color: #1e293b; display: flex; align-items: center; gap: 12px; }
+h2 i { color: #551c1c; background: #1e293b; padding: 10px; border-radius: 12px; font-size: 20px; box-shadow: 0 5px 15px rgba(0, 210, 255, 0.3); }
+
+.row { display: flex; gap: 16px; flex-wrap: wrap; }
+.col { flex: 1; min-width: 140px; }
+.form-group { margin-bottom: 18px; }
+label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.95em; color: #475569; }
+label i { color: #551c1c; margin-right: 6px; }
+
+/* ดีไซน์ Input สไตล์ Tech */
+input[type=text], select, input[type=file], input[type=range] {
+    width: 100%; padding: 12px 14px; border: 2px solid #e2e8f0; background: #f8fafc; border-radius: 12px;
+    transition: all .3s ease; font-family: inherit; font-size: 14px; color: #334155;
+}
+input[type=range] { padding: 5px; cursor: pointer; border: none; background: transparent; }
+input[type=color] { width: 100%; height: 46px; border: 2px solid #e2e8f0; border-radius: 12px; cursor: pointer; background: #f8fafc; padding: 4px; transition: all .3s ease;}
+
+/* เอฟเฟกต์เรืองแสง (Neon Glow) เมื่อคลิก */
+input:focus, select:focus { 
+    outline: none; 
+    border-color: #00d2ff; 
+    background: #fff;
+    box-shadow: 0 0 12px rgba(0, 210, 255, 0.25); 
+}
+input[type=color]:focus { border-color: #00d2ff; box-shadow: 0 0 12px rgba(0, 210, 255, 0.25); }
+
+.section-title { font-size: 1.05em; font-weight: 700; color: #1e293b; margin: 25px 0 15px 0; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; display: flex; align-items: center; gap: 8px;}
+.section-title i { color: #3b82f6; }
+
+fieldset { border: 2px solid #e2e8f0; border-radius: 14px; margin-top: 16px; padding: 20px; background: rgba(255,255,255,0.6); }
+legend { font-weight: 700; color: #3b82f6; padding: 0 12px; font-size: 1em; background: #fff; border-radius: 8px; border: 1px solid #e2e8f0; line-height: 2; }
+
+/* ดีไซน์ปุ่มแบบ Tech / Cyber */
+.button-group { width: 100%; margin-top: 20px; }
+button {
+    width: 100%; border: none; border-radius: 14px; padding: 16px; color: #fff; font: 600 16px Kanit;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative; overflow: hidden;
+}
+.btn-download { 
+    background: linear-gradient(135deg, #00b09b, #96c93d);
+    box-shadow: 0 10px 20px rgba(0, 176, 155, 0.2);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.btn-download:hover { 
+    transform: translateY(-3px); 
+    box-shadow: 0 15px 25px rgba(0, 176, 155, 0.4), 0 0 15px rgba(150, 201, 61, 0.5); 
+}
+.btn-download:active { transform: scale(.97); }
+
+#canvas { display: flex; justify-content: center; align-items: center; width: 100%; margin-bottom: 10px; }
+#canvas canvas, #canvas svg {
+    width: 250px !important; height: 250px !important; max-width: 100%; object-fit: contain;
+    background: #fff; box-shadow: 0 15px 35px rgba(0, 0, 0, .1); transition: transform .3s;
+}
+#canvas canvas:hover, #canvas svg:hover { transform: scale(1.05); }
+
+.preview-title { font-weight: 700; color: #64748b; margin-bottom: 15px; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px; }
+
+/* รองรับหน้าจอมือถือ */
+@media (max-width: 850px) {
+    .container { flex-direction: column; }
+    .right-panel { width: 100%; position: static; top: auto; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <!-- ฝั่งซ้าย: แผงควบคุม -->
+    <div class="left-panel">
+        <h2><i class="fa-solid fa-qrcode"></i> QR Code Generator</h2>
+
+        <div class="form-group">
+        <label><i class="fa-solid fa-link"></i> ข้อความ / URL</label>
+        <input id="dataInput" type="text" value="https://google.com">
+        </div>
+
+        <div class="row">
+            <div class="form-group col">
+                <label><i class="fa-solid fa-shapes"></i> ลวดลายหลัก</label>
+                <select id="dotsType">
+                    <option value="square">Square</option>
+                    <option value="rounded">Rounded</option>
+                    <option value="dots">Dots</option>
+                    <option value="classy">Classy</option>
+                </select>
+            </div>
+            <div class="form-group col">
+                <label><i class="fa-solid fa-fill-drip"></i> การไล่สี</label>
+                <select id="gradientType">
+                    <option value="linear">Linear</option>
+                    <option value="radial">Radial</option>
+                </select>
+            </div>
+            <div class="form-group col">
+                <label><i class="fa-solid fa-compass"></i> ทิศทางองศา</label>
+                <select id="gradientRotation">
+                    <option value="0">0° (ซ้ายไปขวา)</option>
+                    <option value="45">45° (ทแยงลงขวา)</option>
+                    <option value="90">90° (บนลงล่าง)</option>
+                    <option value="135">135° (ทแยงลงซ้าย)</option>
+                    <option value="180">180° (ขวาไปซ้าย)</option>
+                    <option value="270" selected>270° (ล่างขึ้นบน)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- การตั้งค่าสีรวมศูนย์ (Unified Colors) -->
+        <div class="section-title"><i class="fa-solid fa-palette"></i> การตั้งค่าสี (Colors)</div>
+        <div class="row">
+            <div class="form-group col">
+                <label>สีเริ่มต้น (Start Color)</label>
+                <input id="color1" type="color" value="#0f2027">
+            </div>
+            <div class="form-group col">
+                <label>สีสิ้นสุด (End Color)</label>
+                <input id="color2" type="color" value="#203a43">
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col">
+                <label>สีพื้นหลัง (Background)</label>
+                <input id="bgColor" type="color" value="#ffffff">
+            </div>
+        </div>
+
+        <fieldset>
+        <legend><i class="fa-solid fa-sliders"></i> การปรับแบบละเอียด</legend>
+        <div class="row">
+            <div class="form-group col">
+            <label>รูปแบบกรอบมุม</label>
+            <select id="cornersSquareType">
+                <option value="square" selected>Square (สี่เหลี่ยม)</option>
+                <option value="rounded">Rounded (ขอบมน)</option>
+                <option value="extra-rounded">Extra Rounded</option>
+            </select>
+            </div>
+            <div class="form-group col">
+            <label>รูปแบบจุดมุม</label>
+            <select id="cornersDotType">
+                <option value="square" selected>Square (สี่เหลี่ยม)</option>
+                <option value="dot">Dot (วงกลม)</option>
+            </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col">
+            <label>ขอบมนพื้นหลัง (CSS)</label>
+            <input type="range" id="canvasRadius" min="0" max="50" value="0">
+            </div>
+            <div class="form-group col">
+            <label>ระยะขอบ (Margin)</label>
+            <input type="range" id="canvasMargin" min="0" max="50" value="15">
+            </div>
+        </div>
+        </fieldset>
+
+        <div class="row" style="margin-top: 16px;">
+        <div class="form-group col">
+        <label><i class="fa-solid fa-expand"></i> ขนาดภาพ (px)</label>
+        <select id="sizeSelect">
+        <option value="500">500 x 500</option>
+        <option value="1000" selected>1000 x 1000</option>
+        <option value="2000">2000 x 2000</option>
+        </select>
+        </div>
+        <div class="form-group col">
+        <label><i class="fa-solid fa-image"></i> อัปโหลดโลโก้ตรงกลาง</label>
+        <input id="logoInput" type="file" accept="image/png,image/jpeg">
+        </div>
+        </div>
+    </div> <!-- จบฝั่งซ้าย -->
+
+    <!-- ฝั่งขวา: พรีวิวและปุ่มดาวน์โหลด -->
+    <div class="right-panel">
+        <div class="preview-title">Live Preview</div>
+        <div id="canvas"></div>
+        <div class="button-group">
+            <button class="btn-download" onclick="downloadQR()">
+                <i class="fa-solid fa-cloud-arrow-down"></i> ดาวน์โหลด QR Code
+            </button>
+        </div>
+    </div> <!-- จบฝั่งขวา -->
+
+</div>
+
+<script>
+let currentLogo = null;
+
+function getQRConfig(){
+    const size = parseInt(sizeSelect.value);
+    const rotationDegree = parseFloat(gradientRotation.value);
+    const rotationRadians = rotationDegree * (Math.PI / 180);
+    
+    const unifiedGradientSettings = {
+        type: gradientType.value,
+        rotation: rotationRadians, 
+        colorStops: [
+            { offset: 0, color: color1.value },
+            { offset: 1, color: color2.value }
+        ]
+    };
+
+    return {
+        width: size,
+        height: size,
+        data: dataInput.value.trim() !== "" ? dataInput.value : "https://google.com",
+        image: currentLogo,
+        dotsOptions: {
+            type: dotsType.value,
+            gradient: unifiedGradientSettings
+        },
+        cornersSquareOptions: {
+            type: cornersSquareType.value
+        },
+        cornersDotOptions: {
+            type: cornersDotType.value
+        },
+        backgroundOptions: { color: bgColor.value },
+        imageOptions: { crossOrigin: "anonymous", margin: parseInt(canvasMargin.value) }
+    };
+}
+
+const qrCode = new QRCodeStyling(getQRConfig());
+qrCode.append(document.getElementById("canvas"));
+
+// ===== Live Preview =====
+const inputsToWatch = [
+    dataInput, dotsType, gradientType, gradientRotation, sizeSelect,
+    color1, color2, bgColor,
+    cornersSquareType, cornersDotType, canvasRadius, canvasMargin
+];
+
+inputsToWatch.forEach(element => {
+    element.addEventListener("input", updateQR);
+    element.addEventListener("change", updateQR);
+});
+
+function updateQR(){
+    qrCode.update(getQRConfig());
+    
+    // อัปเดตขอบมนของ Canvas
+    const canvasElement = document.querySelector("#canvas canvas") || document.querySelector("#canvas svg");
+    if (canvasElement) {
+        canvasElement.style.borderRadius = canvasRadius.value + "px";
+    }
+}
+
+updateQR();
+
+// ===== ระบบ Logo =====
+logoInput.addEventListener("change", e => {
+    const file = e.target.files[0];
+    if(!file) {
+        currentLogo = null;
+        updateQR();
+        return;
+    }
+    const r = new FileReader();
+    r.onload = x => {
+        currentLogo = x.target.result;
+        updateQR(); 
+    };
+    r.readAsDataURL(file);
+});
+
+function downloadQR(){
+    updateQR();
+    qrCode.download({ name: "HUDUB_QR_Code", extension: "png" });
+}
+</script>
+</body>
+</html>
