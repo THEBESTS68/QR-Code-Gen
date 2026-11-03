@@ -85,7 +85,7 @@ button,input,select{font-family:inherit;color:inherit}
 /* Header */
 header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px}
 .brand{display:flex;align-items:center;gap:14px;min-width:0}
-.logo{
+.logo{display: block;
  width:54px;height:54px;min-width:54px;border-radius:16px;padding:2px;
  background:linear-gradient(135deg,#ff9a3d,#8b5cf6 55%,#38bdf8);
  box-shadow:0 10px 28px rgba(139,92,246,.28);
