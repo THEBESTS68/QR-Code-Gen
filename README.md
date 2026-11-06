@@ -8,6 +8,7 @@
 index.html                 โครงหน้าเว็บ (HTML)
 css/styles.css             หน้าตาทั้งหมด: สี ธีมมืด/สว่าง และ responsive
 js/script.js               การทำงาน: สร้าง QR, ธีมสำเร็จรูป, อัปโหลดโลโก้, ดาวน์โหลด
+js/glass.js                เอฟเฟกต์ Liquid Glass (ปุ่มแก้ว, เลนส์หักเหแสงบนแท็บ) และหยุดพื้นหลังเมื่อสลับแท็บ
 assets/logo.png            โลโก้ DBC
 assets/fonts/              ฟอนต์ LINE Seed Sans TH (Regular / Bold / ExtraBold)
 ```
