@@ -15,7 +15,7 @@ syncPause();
 
 /* ---------- 2. Specular highlight that follows the pointer ---------- */
 // One delegated listener, at most one style write per frame.
-const GLASS='.btn,.icon-btn,.swap-btn';
+const GLASS='.btn,.swap-btn';
 let pending=null,raf=0;
 document.addEventListener('pointermove',e=>{
  if(e.pointerType!=='mouse')return;

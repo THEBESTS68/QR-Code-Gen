@@ -349,10 +349,9 @@ $('resetBtn').addEventListener('click',()=>{
 });
 
 /* ---------- Theme ---------- */
-const themeToggle=$('themeToggle'),themeIcon=$('themeIcon');
+const themeToggle=$('themeToggle');
 function applyTheme(theme){
  document.body.classList.toggle('light',theme==='light');
- themeIcon.textContent=theme==='light'?'☀':'☾';
  themeToggle.title=theme==='light'?'เปลี่ยนเป็นโหมดมืด':'เปลี่ยนเป็นโหมดสว่าง';
  themeToggle.setAttribute('aria-label',themeToggle.title);
  try{localStorage.setItem('qrStudioTheme',theme)}catch(e){}
@@ -360,6 +359,11 @@ function applyTheme(theme){
 let savedTheme=null;
 try{savedTheme=localStorage.getItem('qrStudioTheme')}catch(e){}
 applyTheme(savedTheme||(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'));
-themeToggle.addEventListener('click',()=>applyTheme(document.body.classList.contains('light')?'dark':'light'));
+themeToggle.addEventListener('click',()=>{
+ // replay the press animation (see .theme-switch.switching in styles.css)
+ themeToggle.classList.remove('switching');void themeToggle.offsetWidth;themeToggle.classList.add('switching');
+ applyTheme(document.body.classList.contains('light')?'dark':'light');
+});
+themeToggle.addEventListener('animationend',e=>{if(e.animationName==='ts-press')themeToggle.classList.remove('switching')});
 
 update();
