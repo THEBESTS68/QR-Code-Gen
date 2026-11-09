@@ -272,11 +272,6 @@ input[type=file]{display:none}
 .btn:hover{border-color:var(--border-strong);background:var(--control-hover)}
 .btn:active{transform:scale(.98)}
 .btn:disabled{opacity:.5;cursor:not-allowed}
-.btn-primary{
- border:0;color:#fff;background:linear-gradient(120deg,#ff6b4a,#ff8a3d 35%,#8b5cf6);
- box-shadow:0 10px 26px rgba(139,92,246,.30);
-}
-.btn-primary:hover{filter:brightness(1.07) saturate(1.1);background:linear-gradient(120deg,#ff6b4a,#ff8a3d 35%,#8b5cf6)}
 .btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
 .btn-row .btn{min-height:44px;font-size:14px;font-weight:400}
 .note{font-size:12px;color:var(--subtle);text-align:center;margin-top:14px}
@@ -314,7 +309,7 @@ input[type=file]{display:none}
  .grid2,.grid3{grid-template-columns:1fr}
  .grid2.keep{grid-template-columns:1fr 1fr}
  .export-row{grid-template-columns:1fr 1fr}
- .preview .btn-primary{display:none}
+ .preview .sparkle-button{display:none}
  .mobile-bar{
   display:block;position:fixed;left:0;right:0;bottom:0;z-index:40;padding:10px 12px calc(10px + env(safe-area-inset-bottom));
   background:var(--surface);border-top:1px solid var(--border);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
@@ -409,25 +404,6 @@ body.light{
 .btn:disabled{transform:none}
 .btn:disabled::before{opacity:0}
 
-/* Tinted glass for the main download button */
-.btn-primary{
- border:1px solid rgba(255,255,255,.22);
- background:
-  linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,0) 55%),
-  linear-gradient(120deg,#ff6b4a,#ff8a3d 35%,#8b5cf6);
- box-shadow:
-  inset 0 1px 0 rgba(255,255,255,.45),
-  inset 0 -2px 6px rgba(80,20,140,.25),
-  0 10px 26px rgba(139,92,246,.32);
- --glass-spec:rgba(255,255,255,.38);
-}
-.btn-primary:hover{
- background:
-  linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,0) 55%),
-  linear-gradient(120deg,#ff6b4a,#ff8a3d 35%,#8b5cf6);
- filter:brightness(1.05) saturate(1.1);
-}
-.btn-primary::after{--glass-rim:rgba(255,255,255,.8)}
 
 /* ==========================================================
    Liquid Glass lens — the sliding selection pill in the type tabs
@@ -470,6 +446,114 @@ body.light .glass-lens{box-shadow:inset 0 1px 0 #fff,inset 0 0 0 1px rgba(124,58
  35%{scale:1.12 .86}
  70%{scale:.97 1.04}
  100%{scale:1 1}
+}
+
+/* ==========================================================
+   Sparkle download button
+   Everything is scoped under .sparkle-button so it does not touch the
+   page's other buttons. --active goes 0 → 1 on hover / keyboard focus;
+   the orbiting particles only animate while it is 1.
+   ========================================================== */
+.sparkle-button{
+ --transition:.25s;--spark:1.8s;
+ position:relative;isolation:isolate;display:block;width:100%;
+}
+.sparkle-button button{
+ --cut:.1em;--active:0;--glow:var(--active);
+ --bg:
+  radial-gradient(40% 50% at center 100%,hsl(270 calc(var(--active)*97%) 72% / var(--active)),transparent),
+  radial-gradient(80% 100% at center 120%,hsl(260 calc(var(--active)*97%) 70% / var(--active)),transparent),
+  hsl(260 calc(var(--active)*97%) calc((var(--active)*44%) + 12%));
+ position:relative;display:flex;align-items:center;justify-content:center;gap:.3em;
+ width:100%;min-height:52px;padding:.85em 1.3em;border:0;border-radius:100px;
+ font:700 16px/1.2 var(--font);white-space:nowrap;cursor:pointer;
+ background:var(--bg);
+ box-shadow:
+  0 0 calc(var(--glow)*2.6em) calc(var(--glow)*.5em) hsl(260 97% 61% / .6),
+  0 .05em 0 0 hsl(260 calc(var(--active)*97%) calc((var(--active)*50%) + 30%)) inset,
+  0 -.05em 0 0 hsl(260 calc(var(--active)*97%) calc(var(--active)*60%)) inset;
+ scale:calc(1 + var(--glow)*.03);
+ transition:box-shadow var(--transition),scale var(--transition),background var(--transition),opacity var(--transition);
+}
+.sparkle-button button:is(:hover,:focus-visible):not(:disabled){--active:1}
+.sparkle-button button:active:not(:disabled){scale:1}
+.sparkle-button button:focus-visible{outline:0}
+.sparkle-button button:disabled{opacity:.5;cursor:not-allowed}
+/* outer ring */
+.sparkle-button button::before{
+ content:"";position:absolute;inset:-.25em;z-index:-1;border-radius:100px;
+ border:.25em solid hsl(260 97% 50% / .5);
+ opacity:var(--glow);transition:opacity var(--transition);
+}
+/* the rotating light that runs around the edge */
+.sparkle-button .spark{
+ position:absolute;inset:0;border-radius:100px;overflow:hidden;rotate:0deg;
+ -webkit-mask:linear-gradient(#fff,transparent 50%);mask:linear-gradient(#fff,transparent 50%);
+ animation:sb-flip calc(var(--spark)*2) infinite steps(2,end);
+}
+.sparkle-button .spark::before{
+ content:"";position:absolute;z-index:-1;width:200%;aspect-ratio:1;top:0;left:50%;
+ translate:-50% -15%;transform:rotate(-90deg);
+ opacity:calc(var(--active) + .4);
+ background:conic-gradient(from 0deg,transparent 0 340deg,#fff 360deg);
+ transition:opacity var(--transition);
+ animation:sb-rotate var(--spark) linear infinite both;
+}
+.sparkle-button .backdrop{
+ position:absolute;inset:var(--cut);border-radius:100px;background:var(--bg);
+ transition:background var(--transition);
+}
+.sparkle-button .dl-icon{
+ position:relative;inline-size:1.2em;flex:none;overflow:visible;translate:-10% -4%;
+ stroke:hsl(0 0% calc((var(--active)*70%) + 45%));transition:stroke var(--transition);
+}
+.sparkle-button .dl-arrow{transform-box:fill-box;transform-origin:center}
+.sparkle-button button:is(:hover,:focus-visible):not(:disabled) .dl-arrow{animation:sb-drop 1s ease-in-out infinite}
+.sparkle-button .text{
+ position:relative;letter-spacing:.01ch;
+ background:linear-gradient(90deg,hsl(0 0% calc((var(--active)*100%) + 65%)),hsl(0 0% calc((var(--active)*100%) + 26%)));
+ -webkit-background-clip:text;background-clip:text;color:transparent;
+ transition:background var(--transition);
+}
+/* particles orbiting around the button (added by js/sparkle-button.js) */
+.sparkle-button .particle-pen{
+ --active:0;
+ position:absolute;inset:-160% -8%;z-index:-1;pointer-events:none;
+ -webkit-mask:radial-gradient(closest-side,#fff,transparent);mask:radial-gradient(closest-side,#fff,transparent);
+ opacity:var(--active);transition:opacity var(--transition);
+}
+.sparkle-button button:is(:hover,:focus-visible):not(:disabled) ~ .particle-pen{--active:1;--play-state:running}
+.sparkle-button .particle{
+ position:absolute;overflow:visible;
+ width:calc(var(--size,.25)*1rem);aspect-ratio:1;
+ top:calc(var(--y)*1%);left:calc(var(--x)*1%);opacity:var(--alpha,1);
+ transform-origin:var(--origin-x,1000%) var(--origin-y,1000%);
+ animation:sb-float calc(var(--duration,1)*1s) calc(var(--delay)*-1s) infinite linear;
+ animation-play-state:var(--play-state,paused);
+}
+.sparkle-button .particle:nth-of-type(even){animation-direction:reverse}
+.sparkle-button .particle path{fill:hsl(0 0% 90%);stroke:none}
+body.light .sparkle-button .particle path{fill:hsl(262 83% 62%)}
+@keyframes sb-drop{0%,100%{translate:0 -8%}50%{translate:0 14%}}
+@keyframes sb-flip{to{rotate:360deg}}
+@keyframes sb-rotate{to{transform:rotate(90deg)}}
+@keyframes sb-float{to{rotate:360deg}}
+.fx-paused .sparkle-button *,.fx-paused .sparkle-button *::before{animation-play-state:paused}
+
+/* Page tint while the download button is hovered (the component's
+   "body glow"), done as one fading overlay so nothing re-lays out. */
+.bg-fx::after{
+ content:"";position:absolute;inset:0;opacity:0;transition:opacity .25s;
+ background:radial-gradient(120vmax 90vmax at 75% 70%,hsl(260 97% 32% / .45),hsl(260 97% 6% / .55));
+}
+body.light .bg-fx::after{background:radial-gradient(120vmax 90vmax at 75% 70%,hsl(262 90% 70% / .28),hsl(262 90% 92% / .35))}
+body:has(.sparkle-button button:is(:hover,:focus-visible):not(:disabled)) .bg-fx::after{opacity:1}
+
+/* Touch screens have no hover: keep the purple look all the time,
+   but skip the big glow and the particles. */
+@media(hover:none){
+ .sparkle-button button:not(:disabled){--active:1;--glow:0}
+ .sparkle-button .particle-pen{display:none}
 }
 
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
