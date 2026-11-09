@@ -191,11 +191,6 @@ input[type=color]::-webkit-color-swatch{border:1px solid rgba(0,0,0,.15);border-
 input[type=color]::-moz-color-swatch{border:1px solid rgba(0,0,0,.15);border-radius:9px}
 .hex{font-size:14px;font-variant-numeric:tabular-nums;letter-spacing:.02em}
 .row-between{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap}
-.swap-btn{
- height:34px;padding:0 12px;border-radius:10px;border:1px solid var(--border);background:var(--control);
- color:var(--muted);font-size:13px;cursor:pointer;
-}
-.swap-btn:hover{color:var(--text);border-color:var(--border-strong)}
 .alert{
  display:flex;gap:10px;align-items:flex-start;margin-top:14px;padding:11px 13px;border-radius:12px;font-size:13.5px;
  background:rgba(251,191,36,.10);border:1px solid rgba(251,191,36,.35);color:var(--warn);
@@ -224,12 +219,6 @@ input[type=range]:disabled{opacity:.4;cursor:not-allowed}
 .upload-text span{display:block;font-size:12.5px;color:var(--subtle);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .upload.error{border-color:var(--danger)}
 .upload.error strong{color:var(--danger)}
-.remove-logo{
- height:34px;padding:0 12px;border-radius:9px;border:1px solid var(--border);background:var(--surface-solid);
- color:var(--muted);font-size:13px;cursor:pointer;
-}
-.remove-logo:hover{color:var(--danger);border-color:var(--danger)}
-.remove-logo[hidden]{display:none}
 input[type=file]{display:none}
 
 /* Preview */
@@ -257,16 +246,7 @@ input[type=file]{display:none}
 }
 .encoded b{color:var(--text);font-weight:700;margin-right:6px}
 .export-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
-.btn{
- display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:50px;border-radius:13px;
- border:1px solid var(--border);background:var(--control);font-size:15px;font-weight:700;cursor:pointer;
- transition:transform .15s,filter .15s,background .15s,border-color .15s;
-}
-.btn:hover{border-color:var(--border-strong);background:var(--control-hover)}
-.btn:active{transform:scale(.98)}
-.btn:disabled{opacity:.5;cursor:not-allowed}
 .btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-.btn-row .btn{min-height:44px;font-size:14px;font-weight:400}
 .note{font-size:12px;color:var(--subtle);text-align:center;margin-top:14px}
 
 /* Toast */
@@ -340,62 +320,9 @@ body.light{
 }
 .fx-paused .bg-fx span{animation-play-state:paused}
 
-/* ==========================================================
-   Liquid Glass buttons
-   Layers: frosted body → pointer-following specular light (::before)
-   → bright rim that fades around the edge (::after) → content.
-   ========================================================== */
-:root{
- --glass-fill-top:rgba(255,255,255,.13);
- --glass-fill-bottom:rgba(255,255,255,.03);
- --glass-edge:rgba(255,255,255,.16);
- --glass-rim:rgba(255,255,255,.55);
- --glass-inner:rgba(255,255,255,.28);
- --glass-spec:rgba(255,255,255,.22);
- --glass-drop:0 8px 22px rgba(0,0,0,.28);
-}
-body.light{
- --glass-fill-top:rgba(255,255,255,.95);
- --glass-fill-bottom:rgba(255,255,255,.55);
- --glass-edge:rgba(30,41,59,.12);
- --glass-rim:rgba(255,255,255,1);
- --glass-inner:rgba(255,255,255,.9);
- --glass-spec:rgba(124,58,237,.10);
- --glass-drop:0 8px 20px rgba(30,41,59,.10);
-}
-.btn,.swap-btn{
- position:relative;isolation:isolate;overflow:hidden;
- --mx:50%;--my:0%;
- border:1px solid var(--glass-edge);
- background:linear-gradient(180deg,var(--glass-fill-top),var(--glass-fill-bottom));
- box-shadow:
-  inset 0 1px 0 var(--glass-inner),
-  inset 0 -1px 1px rgba(255,255,255,.06),
-  inset 0 0 12px rgba(255,255,255,.04),
-  var(--glass-drop);
- transition:transform .45s cubic-bezier(.34,1.56,.64,1),box-shadow .2s,border-color .2s,filter .2s;
-}
-.btn::before,.swap-btn::before{
- content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;pointer-events:none;
- background:radial-gradient(140px circle at var(--mx) var(--my),var(--glass-spec),transparent 65%);
- opacity:0;transition:opacity .25s;
-}
-.btn::after,.swap-btn::after{
- content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;padding:1px;
- background:linear-gradient(140deg,var(--glass-rim),transparent 28%,transparent 70%,rgba(255,255,255,.35));
- -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
- -webkit-mask-composite:xor;mask-composite:exclude;
- opacity:.75;
-}
-.btn:hover,.swap-btn:hover{
- border-color:var(--glass-edge);
- background:linear-gradient(180deg,var(--glass-fill-top),var(--glass-fill-bottom));
- transform:translateY(-1px);
-}
-.btn:hover::before,.swap-btn:hover::before{opacity:1}
-.btn:active,.swap-btn:active{transform:scale(.96);transition-duration:.12s}
-.btn:disabled{transform:none}
-.btn:disabled::before{opacity:0}
+/* Glass highlight colors used by the sliding lens below */
+:root{--glass-rim:rgba(255,255,255,.55);--glass-inner:rgba(255,255,255,.28)}
+body.light{--glass-rim:rgba(255,255,255,1);--glass-inner:rgba(255,255,255,.9)}
 
 
 /* ==========================================================
@@ -646,5 +573,88 @@ body.light .theme-switch .ts-sun{opacity:1;transform:rotate(0) scale(1)}
 }
 
 @media(max-width:620px){.theme-switch{font-size:4.6px}}
+
+/* ==========================================================
+   Pill buttons (Copy, Reset, Random, Swap colors, Remove logo)
+   A clear glassy capsule: white inner highlights on two corners, a thin
+   dark rim, a soft blurred shadow underneath (::before), a gloss sweep
+   (::after), and a dark round icon chip on the right.
+   All blurs are on static layers, so nothing re-renders per frame.
+   ========================================================== */
+.pill-btn{
+ /* dark theme (site default) */
+ --pill-text:#e9ecf4;--chip-bg:#e9ecf4;--chip-fg:#151b2c;
+ --hi:rgba(255,255,255,.38);--hi2:rgba(255,255,255,.2);--rim:rgba(0,0,0,.9);
+ --tint:rgba(255,255,255,.035);--gloss:rgba(255,255,255,.2);--under:rgba(0,0,0,.95);
+ --line:rgba(255,255,255,.08);--drop:0 6px 14px rgba(0,0,0,.4);--tr:15%;
+ position:relative;isolation:isolate;
+ display:flex;align-items:center;justify-content:space-between;gap:.6rem;
+ width:100%;min-height:50px;padding:0 7px 0 1.1rem;
+ border-radius:9999px;border:1px double var(--line);background:var(--tint);
+ color:var(--pill-text);font:700 15px/1.2 var(--font);cursor:pointer;user-select:none;
+ -webkit-tap-highlight-color:transparent;
+ box-shadow:
+  inset 2px -2px 1px -1px var(--hi),inset -2px 2px 1px -1px var(--hi),
+  inset 6px -6px 1px -6px var(--hi2),inset -6px 6px 1px -6px var(--hi2),
+  inset 0 0 2px var(--rim),var(--drop);
+ transition:transform .25s,background .25s,color .25s,opacity .25s;
+}
+body.light .pill-btn{
+ --pill-text:#3e3e3e;--chip-bg:#3e3e3e;--chip-fg:#f5f5f5;
+ --hi:rgba(255,255,255,.9);--hi2:rgba(255,255,255,.55);--rim:rgba(0,0,0,.8);
+ --tint:rgba(0,0,0,.035);--gloss:rgba(255,255,255,.8);--under:rgba(0,0,0,.9);
+ --line:rgba(51,51,51,.08);--drop:0 4px 8px rgba(0,0,0,.2);
+}
+/* soft shadow under the capsule */
+.pill-btn::before{
+ content:"";position:absolute;z-index:-1;top:35%;left:8px;right:8px;height:calc(100% - 16px);
+ border-radius:inherit;border:1px solid var(--under);filter:blur(8px);pointer-events:none;
+}
+/* gloss on two opposite corners */
+.pill-btn::after{
+ content:"";position:absolute;z-index:1;inset:0;border-radius:inherit;filter:blur(7px);pointer-events:none;
+ background:linear-gradient(45deg,var(--gloss) 0%,transparent var(--tr),transparent calc(100% - var(--tr)),var(--gloss) 100%);
+}
+.pill-overlay{
+ position:absolute;inset:4px;border-radius:inherit;pointer-events:none;
+ border:1px solid rgba(255,255,255,.2);filter:blur(1px);
+}
+.pill-text{white-space:nowrap;filter:drop-shadow(0 25px 3px rgba(102,102,102,.15))}
+.pill-icon{
+ flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:50%;
+ background:var(--chip-bg);box-shadow:0 0 6px rgba(0,0,0,.3);transition:transform .25s;
+}
+.pill-icon svg{
+ width:16px;height:16px;fill:none;stroke:var(--chip-fg);
+ stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;
+}
+.pill-btn:hover:not(:disabled){background:transparent;transform:translateY(-3px)}
+.pill-btn:hover:not(:disabled) .pill-icon{transform:scale(1.1)}
+.pill-btn:active:not(:disabled){transform:scale(.94)}
+.pill-btn:active:not(:disabled) .pill-icon{transform:scale(.94)}
+body.light .pill-btn:active:not(:disabled){color:#000}
+.pill-btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.pill-btn:disabled{opacity:.5;cursor:not-allowed}
+
+.btn-row .pill-btn{min-height:46px;font-size:14px}
+.btn-row .pill-btn .pill-icon{width:32px;height:32px}
+
+/* small version: Swap colors, Remove logo */
+.pill-sm{width:auto;min-height:36px;gap:.5rem;padding:0 5px 0 .85rem;font-size:13px}
+.pill-sm::before{left:6px;right:6px;height:calc(100% - 10px);filter:blur(6px)}
+.pill-sm .pill-overlay{inset:3px}
+.pill-sm .pill-icon{width:26px;height:26px}
+.pill-sm .pill-icon svg{width:13px;height:13px}
+.pill-btn[hidden]{display:none}
+.pill-danger:hover:not(:disabled){color:var(--danger)}
+.pill-danger:hover:not(:disabled) .pill-icon{background:var(--danger)}
+.pill-danger:hover:not(:disabled) .pill-icon svg{stroke:#fff}
+
+@media(max-width:620px){
+ .pill-btn{gap:.4rem;padding-left:.9rem;font-size:14px}
+ .pill-icon{width:32px;height:32px}
+ .pill-sm{padding-left:.75rem;font-size:13px}
+ .pill-sm .pill-icon{width:26px;height:26px}
+}
 
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}

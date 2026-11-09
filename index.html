@@ -104,7 +104,7 @@
    <button type="button" id="modeSolid" aria-pressed="true">สีเดียว</button>
    <button type="button" id="modeGradient" aria-pressed="false">ไล่เฉดสี</button>
   </div>
-  <button type="button" class="swap-btn" id="swapColors" title="สลับสี QR กับพื้นหลัง">⇄ สลับสี</button>
+  <button type="button" class="pill-btn pill-sm" id="swapColors" title="สลับสี QR กับพื้นหลัง"><span class="pill-text">สลับสี</span><span class="pill-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4 3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/></svg></span><span class="pill-overlay" aria-hidden="true"></span></button>
  </div>
 
  <div class="grid3">
@@ -133,7 +133,7 @@
   <label class="upload" id="logoDropZone" for="logoInput" tabindex="0" role="button" aria-label="เลือกหรือลากไฟล์โลโก้">
    <span class="upload-thumb" id="logoThumb" aria-hidden="true">⬆</span>
    <span class="upload-text"><strong id="logoDropTitle">เลือกไฟล์โลโก้</strong><span id="logoName">ลากไฟล์มาวาง หรือคลิกเพื่อเลือก • PNG / JPG / WEBP / SVG</span></span>
-   <button type="button" class="remove-logo" id="removeLogo" hidden>ลบ</button>
+   <button type="button" class="pill-btn pill-sm pill-danger" id="removeLogo" hidden><span class="pill-text">ลบ</span><span class="pill-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg></span><span class="pill-overlay" aria-hidden="true"></span></button>
   </label>
   <input id="logoInput" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml">
  </div>
@@ -167,12 +167,12 @@
   <select id="formatSelect" aria-label="ชนิดไฟล์">
    <option value="png">PNG</option><option value="jpeg">JPG</option><option value="svg">SVG (เวกเตอร์)</option>
   </select>
-  <button class="btn" id="copyBtn" type="button">📋 คัดลอกรูป</button>
+  <button class="pill-btn" id="copyBtn" type="button"><span class="pill-text">คัดลอกรูป</span><span class="pill-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></span><span class="pill-overlay" aria-hidden="true"></span></button>
  </div>
  <div class="sparkle-button"><button id="downloadBtn" type="button"><span class="spark" aria-hidden="true"></span><span class="backdrop" aria-hidden="true"></span><svg class="dl-icon" viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path class="dl-arrow" d="M12 3.5v11M7.5 10.5L12 15l4.5-4.5"/><path class="dl-tray" d="M4 15.5V18a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2.5"/></svg><span class="text">ดาวน์โหลด QR Code</span></button></div>
  <div class="btn-row">
-  <button class="btn" id="resetBtn" type="button">↺ รีเซ็ตค่า</button>
-  <button class="btn" id="randomBtn" type="button">🎲 สุ่มธีม</button>
+  <button class="pill-btn" id="resetBtn" type="button"><span class="pill-text">รีเซ็ตค่า</span><span class="pill-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 2.6-6.4L3 8"/><path d="M3 3v5h5"/></svg></span><span class="pill-overlay" aria-hidden="true"></span></button>
+  <button class="pill-btn" id="randomBtn" type="button"><span class="pill-text">สุ่มธีม</span><span class="pill-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg></span><span class="pill-overlay" aria-hidden="true"></span></button>
  </div>
  <div class="note">พัฒนาโดย นักศึกษาสาขาคอมพิวเตอร์ธุรกิจดิจิทัล</div>
 </aside>

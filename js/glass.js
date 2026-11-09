@@ -13,24 +13,7 @@ const syncPause=()=>document.documentElement.classList.toggle('fx-paused',docume
 document.addEventListener('visibilitychange',syncPause);
 syncPause();
 
-/* ---------- 2. Specular highlight that follows the pointer ---------- */
-// One delegated listener, at most one style write per frame.
-const GLASS='.btn,.swap-btn';
-let pending=null,raf=0;
-document.addEventListener('pointermove',e=>{
- if(e.pointerType!=='mouse')return;
- const el=e.target.closest&&e.target.closest(GLASS);
- if(!el)return;
- pending={el,x:e.clientX,y:e.clientY};
- if(!raf)raf=requestAnimationFrame(()=>{
-  raf=0;
-  const {el,x,y}=pending,r=el.getBoundingClientRect();
-  el.style.setProperty('--mx',(x-r.left)+'px');
-  el.style.setProperty('--my',(y-r.top)+'px');
- });
-},{passive:true});
-
-/* ---------- 3. Liquid Glass lens ---------- */
+/* ---------- 2. Liquid Glass lens ---------- */
 let svgRoot=null,lensCount=0;
 function ensureSvgRoot(){
  if(svgRoot)return svgRoot;
