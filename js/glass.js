@@ -126,6 +126,5 @@ function attachLens(container,activeSelector,attr){
  requestAnimationFrame(()=>requestAnimationFrame(()=>lens.classList.add('ready')));
 }
 
-attachLens(document.querySelector('.tabs'),'.tab[aria-selected="true"]','aria-selected');
 attachLens(document.querySelector('.segmented'),'button[aria-pressed="true"]','aria-pressed');
 })();

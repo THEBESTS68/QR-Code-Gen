@@ -143,15 +143,6 @@ select option{background:var(--surface-solid);color:var(--text)}
 .pw-wrap button:hover{background:var(--control-hover);color:var(--text)}
 
 /* Tabs / segmented */
-.tabs{display:flex;gap:6px;padding:5px;border:1px solid var(--border);border-radius:14px;background:var(--control);margin-bottom:16px;overflow-x:auto;scrollbar-width:none}
-.tabs::-webkit-scrollbar{display:none}
-.tab{
- flex:1 0 auto;display:flex;align-items:center;justify-content:center;gap:6px;height:38px;padding:0 14px;
- border:0;border-radius:10px;background:transparent;color:var(--muted);font-size:14px;cursor:pointer;white-space:nowrap;
- transition:background .15s,color .15s;
-}
-.tab:hover{color:var(--text)}
-.tab[aria-selected=true]{background:var(--accent);color:#fff;box-shadow:0 4px 14px rgba(139,92,246,.35)}
 .tab-panel[hidden]{display:none}
 .segmented{display:inline-flex;gap:4px;padding:4px;border:1px solid var(--border);border-radius:12px;background:var(--control)}
 .segmented button{height:34px;padding:0 14px;border:0;border-radius:9px;background:transparent;color:var(--muted);font-size:13.5px;cursor:pointer}
@@ -326,14 +317,13 @@ body.light{--glass-rim:rgba(255,255,255,1);--glass-inner:rgba(255,255,255,.9)}
 
 
 /* ==========================================================
-   Liquid Glass lens — the sliding selection pill in the type tabs
-   and the color-mode switch. In Chromium browsers js/glass.js adds a
+   Liquid Glass lens — the sliding selection pill in the
+   color-mode switch. In Chromium browsers js/glass.js adds a
    real refraction filter (SVG displacement map), so the text under
    the lens bends and magnifies. Other browsers get the same glass
    pill without the refraction.
    ========================================================== */
-.tabs.has-lens,.segmented.has-lens{position:relative}
-.tabs.has-lens .tab[aria-selected=true],
+.segmented.has-lens{position:relative}
 .segmented.has-lens button[aria-pressed=true]{
  background:transparent;box-shadow:none;border-color:transparent;color:var(--accent-text);font-weight:700;
 }
@@ -655,6 +645,72 @@ body.light .pill-btn:active:not(:disabled){color:#000}
  .pill-icon{width:32px;height:32px}
  .pill-sm{padding-left:.75rem;font-size:13px}
  .pill-sm .pill-icon{width:26px;height:26px}
+}
+
+/* ==========================================================
+   Gradient menu — the data-type tabs (Link / Text / Wi‑Fi / Email / Phone)
+   Each tab is a round icon button. The selected tab (and any hovered tab)
+   widens into a gradient pill that shows its name, with a soft colored
+   glow underneath. Each tab sets its own --g1 / --g2 / --label in the HTML.
+   The glow is a static blurred layer; only opacity/scale animate.
+   ========================================================== */
+.gradient-menu{
+ --size:52px;--open:128px;
+ display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px;padding:2px 0 6px;
+}
+.gradient-menu .tab{
+ position:relative;isolation:isolate;flex:none;
+ display:flex;align-items:center;justify-content:center;
+ width:var(--size);height:var(--size);padding:0;border-radius:999px;
+ border:1px solid var(--border);background:rgba(255,255,255,.06);
+ box-shadow:0 8px 20px rgba(0,0,0,.35);
+ color:var(--muted);cursor:pointer;-webkit-tap-highlight-color:transparent;
+ transition:width .5s,box-shadow .5s,border-color .5s;
+}
+body.light .gradient-menu .tab{background:#fff;border-color:transparent;box-shadow:0 10px 20px rgba(30,41,59,.12)}
+.gradient-menu .tab-fill,.gradient-menu .tab-glow{
+ position:absolute;border-radius:inherit;pointer-events:none;
+ background:linear-gradient(45deg,var(--g1),var(--g2));
+ opacity:0;transition:opacity .5s;
+}
+.gradient-menu .tab-fill{inset:-1px}
+.gradient-menu .tab-glow{z-index:-1;left:0;right:0;top:10px;height:100%;filter:blur(15px)}
+.gradient-menu .tab-icon{
+ position:relative;z-index:1;display:grid;place-items:center;
+ transition:transform .5s;
+}
+.gradient-menu .tab-icon svg{
+ width:24px;height:24px;fill:none;stroke:currentColor;
+ stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;
+}
+.gradient-menu .tab-label{
+ position:absolute;z-index:1;white-space:nowrap;
+ color:var(--label,#fff);font-size:14.5px;font-weight:700;letter-spacing:.02em;
+ transform:scale(0);transition:transform .5s;
+}
+/* open state: selected tab, or hovered with a mouse */
+.gradient-menu .tab[aria-selected=true]{width:var(--open);box-shadow:none;border-color:transparent}
+.gradient-menu .tab[aria-selected=true] .tab-fill{opacity:1}
+.gradient-menu .tab[aria-selected=true] .tab-glow{opacity:.5}
+.gradient-menu .tab[aria-selected=true] .tab-icon{transform:scale(0)}
+.gradient-menu .tab[aria-selected=true] .tab-label{transform:scale(1);transition-delay:.15s}
+@media(hover:hover){
+ .gradient-menu .tab:hover{width:var(--open);box-shadow:none;border-color:transparent}
+ .gradient-menu .tab:hover .tab-fill{opacity:1}
+ .gradient-menu .tab:hover .tab-glow{opacity:.5}
+ .gradient-menu .tab:hover .tab-icon{transform:scale(0)}
+ .gradient-menu .tab:hover .tab-label{transform:scale(1);transition-delay:.15s}
+ .gradient-menu .tab:not([aria-selected=true]):hover .tab-icon{color:var(--text)}
+}
+.gradient-menu .tab:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+@media(max-width:620px){
+ .gradient-menu{--size:44px;--open:104px;gap:7px}
+ .gradient-menu .tab-icon svg{width:21px;height:21px}
+ .gradient-menu .tab-label{font-size:13.5px}
+}
+@media(max-width:350px){
+ .gradient-menu{--size:40px;--open:96px;gap:6px}
 }
 
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
